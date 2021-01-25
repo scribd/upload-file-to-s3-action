@@ -1,0 +1,35 @@
+name: 'Upload File to S3 Action'
+description: 'Upload individual files to S3'
+inputs:
+  path:
+    description: 'The filepath to upload'
+    required: true
+  destination:
+    description: 'The destination filepath.'
+    required: false
+  bucket:
+    description: 'The bucket to place the file in.'
+    required: true
+  access-key-id:
+    description: 'The AWS access key id.'
+    required: true
+  secret-access-key:
+    description: 'The AWS secret access key.'
+    required: true
+  region:
+    description: 'The AWS region to use.'
+    default: us-east-1
+  permissions:
+    description: 'The ACL permissions to set for the file.'
+    default: public-read
+runs:
+  using: "composite"
+  steps: 
+    - run: |
+        export AWS_ACCESS_KEY_ID="${{ inputs.access-key-id }}"
+        export AWS_SECRET_ACCESS_KEY="${{ inputs.secret-access-key }}"
+        export AWS_DEFAULT_REGION="${{ inputs.region }}"
+        [[ -n "${{ inputs.destination }}" ]] && DESTINATION_PATH="${{ inputs.destination }}" || DESTINATION_PATH="${{ inputs.path }}"
+
+        aws s3 cp ${{ inputs.path }} "s3://${{ inputs.bucket }}/$DESTINATION_PATH" --region ${{ inputs.region }} --acl ${{ inputs.permissions }}
+      shell: bash
