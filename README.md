@@ -5,7 +5,7 @@ Github Action to upload individual files to S3.
 ## Example usage
 
 ```yaml
-- uses: justAnotherDev/upload-file-to-s3-action@v1
+- uses: scribd/upload-file-to-s3-action@v2
   with:
     path: build/outputs/release/built-app.apk
     destination: myapp.apk
