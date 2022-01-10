@@ -12,6 +12,13 @@ async function run() {
 		// find the first matching file
 		const globber = await glob.create(core.getInput('path'))
 		const files = await globber.glob()
+
+		// confirm a file was found
+		if (files.length <= 0) {
+			throw `No files matching the pattern '${core.getInput('path')}' found. Exiting.`
+		}
+
+		// upload the file
 		const path = files[0]
 		const destinationPath = core.getInput('destination') || path
 		await exec.exec('aws', ['s3', 'cp', path, `s3://${core.getInput('bucket')}/${destinationPath}`, '--region', core.getInput('region'), '--acl', core.getInput('permissions'), '--no-progress'])
