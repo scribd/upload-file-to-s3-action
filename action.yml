@@ -23,5 +23,5 @@ inputs:
     description: 'The ACL permissions to set for the file.'
     default: public-read
 runs:
-  using: node12
+  using: node16
   main: dist/index.js
